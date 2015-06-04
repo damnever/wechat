@@ -1,0 +1,3 @@
+# A powerfull chat room
+User-agent: *
+Disallow:

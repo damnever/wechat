@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style type="text/css">
+	input[type=file] {
+		margin-top: 6px;
+		margin-bottom: 8px;
+	}
+</style>
+{% end %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div id="alert-warning">
+			<div class="alert alert-warning" role="alert" style="display:none;">
+	  			<p><span class="glyphicon glyphicon-warning-sign" style="color:#cc0000;"></span>&emsp;
+	  			<span id="error-message">Message</span></p>
+			</div>
+		</div>
+		<div id="signup">
+			<div class="header-area">
+				欢迎注册！
+			</div>
+			<div class="form-area">
+			<form class="form-horizontal" method="POST" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="username" class="col-md-3 control-label">用户名</label>
+					<div class="col-md-8">
+						<input name="username" type="text" class="form-control" id="username" placeholder="your username"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="email" class="col-md-3 control-label">邮&emsp;箱</label>
+					<div class="col-md-8">
+						<input name="email" type="text" class="form-control" id="email" placeholder="your email"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-md-3 control-label">密&emsp;码</label>
+					<div class="col-md-8">
+						<input name="password" type="password" class="form-control" id="password" placeholder="your password"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="repassword" class="col-md-3 control-label">确&emsp;认</label>
+					<div class="col-md-8">
+						<input name="repassword" type="password" class="form-control" id="repassword" placeholder="confirm password"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">性&emsp;别</label>
+				    <div class="col-md-2">
+				      	<div class="radio">
+				        	<label><input name="sex" type="radio" value="boy"> 男</label>
+				      	</div>
+				    </div>
+				    <div class="col-md-2">
+				      	<div class="radio">
+				        	<label><input name="sex" type="radio" value="girl" checked> 女</label>
+				      	</div>
+				    </div>
+				</div>
+				<div class="form-group">
+    				<label class="col-md-3 control-label">头&emsp;像</label>
+    				<div class="col-md-8">
+   				 		<input type="file" name="avatar" accept="image/gif, image/jpeg,image/png,image/jpg"/>
+   				 	</div>
+  				</div>
+				<div class="form-group">
+					<div class="col-md-offset-3 col-md-2">
+						<button type="submit" class="btn btn-primary btn-sm">注&emsp;册</button>
+					</div>
+					<div class="col-md-2">
+						<a href="/login/" class="btn btn-link btn-sm">已有账号？</a>
+					</div>
+				</div>
+				{% module xsrf_form_html() %}
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% end %}
+
+{% block script %}
+<script type="text/javascript" src="{{ static_url("js/check.js") }}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		if (!window.console) window.console = {};
+	    if (!window.console.log) window.console.log = function() {};
+
+	    checkUsername(true);
+	    checkEmail(true);
+	    checkPassword(false);
+	    checkConfirmPw();
+	    checkFile();
+	    allowSignup();
+	});
+</script>
+{% end %}

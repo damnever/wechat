@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div id="alert-warning">
+			<div class="alert alert-warning" role="alert" style="display:none;">
+	  			<p><span class="glyphicon glyphicon-warning-sign" style="color:#cc0000;"></span>&emsp;
+	  			<span id="error-message">Message</span></p>
+			</div>
+		</div>
+		<div id="findpw">
+			<div class="header-area">
+				输入您的邮箱！
+			</div>
+			<div class="form-area">
+			<form class="form-horizontal" method="POST"  style="margin-top:20px;">
+				<div class="form-group">
+					<div class="col-md-8" style="margin-left:20px;">
+						<input name="email" type="text" class="form-control" id="email" placeholder="your email"/>
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary btn-sm">确&emsp;认</button>
+					</div>
+				</div>
+				{% module xsrf_form_html() %}
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% end %}
+
+{% block script %}
+<script type="text/javascript" src="{{ static_url("js/check.js") }}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		if (!window.console) window.console = {};
+	    if (!window.console.log) window.console.log = function() {};
+
+	    checkEmail(false);
+	    allowFindpw();
+	});
+</script>
+{% end %}

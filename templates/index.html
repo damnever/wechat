@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ static_url("css/main.css") }}"/>
+{% end %}
+
+{% block content %}
+<div id="main">
+	<div class="row">
+		<div class="col-md-3 col-md-offset-1">
+			<span class="avatar">
+				<img src="data:image/jpg;base64,{{ current_avatar }}" alt="Damnever" class="img-circle" width="75"/>
+			</span>
+			<div id="user-list">
+				<div id="me-detail">{{ current_user }}</div>
+				<div id="list-img">
+					<span id="chat-img">
+						<img class="center-block" src="{{ static_url("imgs/chat_list.png") }}" alt="正在聊天"/>
+					</span>
+					<span id="users-img">
+						<img class="center-block" src="{{ static_url("imgs/user_list.png") }}" alt="所有用户"/>
+					</span>
+				</div>
+				<span class="clearfix"></span>
+				<!-- User List -->
+  				<div id="other-list" class="list-group">
+	  			</div>
+			</div>
+		</div>
+
+		<div class="col-md-7">
+			<div id="chat-dialog" style="display:none;">
+				<div class="title">Username</div>
+				<div class="content" id="message-content">
+				</div>
+				<div class="foot-tool">
+					<form class="form-horizontal" method="POST" id="messageform">
+						<div class="form-group">
+							<div class="col-md-2" style="padding-left: 36px">
+								<input name="picture" type="file" class="filestyle" accept="image/gif, image/jpeg,image/png,image/jpg"/>
+							</div>
+							<div class="col-md-8">
+								<input name="text" type="text" class="form-control" id="input" placeholder="说点什么..."/>
+							</div>
+							<div class="col-md-2">
+								<button type="submit" class="btn btn-default">发&ensp;送</button>
+							</div>
+						</div>
+						{% module xsrf_form_html() %}
+					</form>
+				</div>
+			</div>
+		</div>
+		<p id="placeholder" style="display:none;"></p>
+	</div>
+</div>
+{% end %}
+
+{% block script %}
+<script type="text/javascript" src="{{ static_url("js/bootstrap-filestyle.min.js") }}"></script>
+<script type="text/javascript" src="{{ static_url("js/chat.js") }}"></script>
+<script type="text/javascript">
+	$(":file").filestyle({input: false, icon: false, buttonText: "图片"});
+</script>
+{% end %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="keywords" content="聊天室,Tornado,long polling"/>
+	<meta name="description" content="一个强大的聊天室 by Damnever"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>{% if title %}{{ title }} &laquo; 人如其名{% else %}人如其名{% end %}</title>
+	<link rel="icon" href="{{ static_url("favicon.ico") }}"/>
+    <link rel="shortcut icon" href="{{ static_url("favicon.ico") }}"/>
+    <link rel="Bookmark" href="{{ static_url("favicon.ico") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ static_url("css/bootstrap.min.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ static_url("css/base.css") }}"/>
+    {% block head %}{% end %}
+    <script type="text/javascript" src="{{ static_url("js/jquery-2.1.1.min.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/bootstrap.min.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/utils.js") }}"></script>
+</head>
+<body>
+	<div class="container">
+		{% block content %}{% end %}
+		<div class="row">
+			<div class="footer">
+				© 2015 Damnever. Powered by Tornado.
+			</div>
+		</div>
+	</div>
+	{% block script %}{% end %}
+</body>
+</html>
