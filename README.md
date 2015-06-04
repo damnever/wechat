@@ -1,4 +1,4 @@
-## Chatting Room (To Be Continued)
+## Chat Room (To Be Continued)
 
 Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 
