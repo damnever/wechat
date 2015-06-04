@@ -1,16 +1,18 @@
-## Chat Room(To Be Continued)
+## Chatting Room (To Be Continued)
 
-Tornado, MySQL, Redis, Bootstrap, jQuery
+Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 
 ---
 
 ### Summary
 
 - **Tornado**: Using long polling, rather than WebSocket.
+- **MySQL**: Storing user informations，UUIDs that is what email verification and password recovery need.
+- **Redis**：Storing online users, and through Pub-Sub to push online/offline messages, chat messages.
 - **AJAX**: Verifying forms, including sign-up, log-in, password recovery, etc.
 - **Email Verification**: Sign-up, password recovery.
-- **MySQL**: Storing user informations，UUIDs, it is what email verification and password recovery needs.
-- **Redis**：Storing online users, and pushing on/offline messages, chat messages through Pub-Sub.
+- **Online/offline**: Using long polling to indicate user if online.
+- **New Messages**: If received message from the user is not current chat user, showing the number of unread message. Otherwise, showing messages in chat box.
 
 ---
 
@@ -24,8 +26,9 @@ See: [requirements.txt](./requirements.txt)
 
 ### TO-DO
 
-- Blocking when send email, maybe task queue?
-- Log in through other sites of OAuth?
+- When sending email, page would blocking, maybe task queue?
+- When user offline, clear up messages?
+- Through other sites of OAuth login?
 - A kinds of BUGs，to be continued O(∩_∩)O~
 
 ### LICENSE
