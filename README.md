@@ -12,7 +12,10 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 - **AJAX**: Verifying forms, including sign-up, log-in, password recovery, etc.
 - **Email Verification**: Sign-up, password recovery.
 - **Online/offline**: Using long polling to indicate user if online.
-- **New Messages**: If received message from the user is not current chat user, showing the number of unread message. Otherwise, showing messages in chat box.
+- **New Messages**: If received message from the user is not current chat user, showing the number of unread message. Otherwise, showing messages in chat box. In addition, pictures is ok!
+
+![](./example2.png)
+![](./example1.png)
 
 ---
 

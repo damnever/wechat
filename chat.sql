@@ -17,7 +17,7 @@ create table `users` (
     `username` varchar(18) not null,
     `password` varchar(40) not null,
     `email` varchar(255) not null,
-    `sex` varchar(3) not null,
+    `sex` varchar(4) not null,
     `avatar` longtext not null,
     `admin` bool not null default 0,
     `active` bool not null default 0,

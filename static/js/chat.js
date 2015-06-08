@@ -42,11 +42,13 @@ var LIST_CLICKED = "chat";
 var clickUser = function() {
 	$("#other-list").on("dblclick", "a",function() {
 		CURRENT_CHAT_USER = $(this).attr("id");
+		console.log(CURRENT_CHAT_USER);
 		var chatDialog = $("#chat-dialog");
 		var chatTitle = $($("#chat-dialog div")[0]);
 		if (chatTitle.text() == CURRENT_CHAT_USER) {
 			return;
 		}
+		$("#message-content").html("");
 		chatDialog.hide("slow", function() {
 			chatTitle.text(CURRENT_CHAT_USER);
 			chatDialog.show("slow", function() {
@@ -148,6 +150,9 @@ var updater = {
         		}
         	} else if (msg.type == "message") {
         		var username = msg.message.from;
+        		if (!(username in CHAT_USERS)) {
+        			CHAT_USERS[username] = 0;
+        		}
         		if (username != CURRENT_CHAT_USER) {
         			// If user not CURRENT_CHAT_USER, add user to CHAT_USERS
         			if (!(username in CHAT_USERS)) {

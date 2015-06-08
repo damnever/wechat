@@ -65,13 +65,13 @@ class Rds(object):
             self._redis.publish(self.SUBJECT_OUTLINE, username)
 
     def new_message(self, from_name, to_name, message):
-        self._redis.rpush(
-            self.LIST_MESSAGES.format(from_=from_name, to=to_name), message)
+        key = self.LIST_MESSAGES.format(from_=from_name, to=to_name)
+        self._redis.rpush(key, message)
 
     def all_messages(self, from_name, to_name):
-        return self._redis.lrange(
-            self.LIST_MESSAGES.format(from_=from_name, to=to_name), 0, -1)
+        key = self.LIST_MESSAGES.format(from_=from_name, to=to_name)
+        return self._redis.lrange(key, 0, -1)
 
     def clear_messages(self, from_name, to_name):
-        self._redis.delete(
-            self.LIST_MESSAGES.format(from_=from_name, to=to_name))
+        key = self.LIST_MESSAGES.format(from_=from_name, to=to_name)
+        self._redis.delete(key)
