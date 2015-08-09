@@ -9,8 +9,6 @@ Using API from http://www.tuling123.com/openapi/cloud/access_api.jsp
 import requests
 from tornado.options import options
 
-from libs.utils import json_loads
-
 #  import urllib
 #  from tornado.httpclient import AsyncHTTPClient
 #  AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
@@ -28,7 +26,7 @@ def get(msg, userid, key=options.robot_key, url=options.robot_url):
 def parse_response(response):
     if response.status_code != 200:
         return u'机器人开小差了...'
-    r = json_loads(response.text)
+    r = response.json()
     if r['code'] == 100000:  # text
         return r['text']
     elif r['code'] == 305000:  # train
