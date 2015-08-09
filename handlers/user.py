@@ -89,11 +89,11 @@ class CheckPasswordHandler(BaseHandler):
 class CheckUsernameHandler(BaseHandler):
 
     @tornado.gen.coroutine
-    def post(self):
+    def get(self):
         username = self.get_argument('username', None)
         sql = 'select * from users where username=%s'
         user = yield self.async_task(self.db.get, sql, username)
-        if user:
+        if user or username == 'Robot':
             self.write('fail')
             return
         self.write('ok')
