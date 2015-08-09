@@ -31,7 +31,7 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 
 4. `python app.py` or `chmod +x app.py` then `./app.py`.
 
-5. Enjoy it, and sart the repo!!!
+5. Enjoy it, and star the repo!!!
 
 ---
 
