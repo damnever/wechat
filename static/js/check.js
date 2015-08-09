@@ -55,8 +55,8 @@ function checkUsername(send) {
 
 		if (send) {
 			// Send username and check if existed.
-			var message = {"username": username};
-			$.postJSON("/checkusername", message, function(response) {
+			var data = {"username": username};
+			$.get("/checkusername", data, function(response) {
 				console.log(response);
 				if (response == "fail") {
 					showMessage("用户名已经存在！");

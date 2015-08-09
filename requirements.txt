@@ -3,3 +3,4 @@ futures == 3.0.2
 tornado == 4.1
 MySQL-Python == 1.2.5
 torndb == 0.3
+requests == 2.7.0

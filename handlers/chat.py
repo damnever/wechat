@@ -7,6 +7,7 @@ Chat handlers.
 
 import time
 
+import tornado.web
 import tornado.gen
 import tornado.concurrent
 import tornado.escape
@@ -14,6 +15,7 @@ import tornado.escape
 from libs.handler import BaseHandler
 from libs.utils import active_authentication, json_multi_loads, \
     json_dumps, json_loads
+from libs import robot
 
 
 class ChatRoomHandler(BaseHandler):
@@ -83,7 +85,7 @@ class UserListHandler(BaseHandler):
 
     @active_authentication
     @tornado.gen.coroutine
-    def post(self):
+    def get(self):
         users = self.rds.all_online_users()
         if not users or len(users) <= 1:  # Doesn't include self
             self.write(tornado.escape.json_encode([]))
@@ -133,10 +135,40 @@ class MessageHandler(BaseHandler):
         self.write('Got new message.')
 
 
+class RobotHandler(BaseHandler):
+
+    @active_authentication
+    @tornado.gen.coroutine
+    def post(self):
+        message = self.get_argument('text', ' ')
+        picture = self.get_argument('picture', None)
+        me = self.current_user
+
+        # Save message from me to Robot.
+        human_msg = {'text': message, 'picture': picture, 'date': time.time()}
+        self.rds.new_message(me, 'Robot', json_dumps(human_msg))
+
+        sql = 'select id from users where username=%s'
+        userid = yield self.async_task(self.db.get, sql, me)
+        response = yield self.async_task(robot.get, message, userid)
+        if picture:
+            picture = '<b>不要发图片给我，亲！</b>'
+        # Save message from Robot to me.
+        robot_msg = {'text': response, 'picture': picture, 'date': time.time()}
+        self.rds.new_message('Robot', me, json_dumps(robot_msg))
+        # Publish message from Robot to me.
+        pub_msg = {'from': 'Robot', 'to': me}
+        pub_msg.update(robot_msg)
+        self.rds.publish(self.rds.SUBJECT_NEW_MESSAGE, json_dumps(pub_msg))
+
+        self.write('Got new message.')
+
+
 urls = [
     ('/', ChatRoomHandler),
     ('/chat', ChatHandler),
     ('/user/live', UserLifeHandler),
     ('/user/list', UserListHandler),
     ('/messages', MessageHandler),
+    ('/robot', RobotHandler),
 ]
