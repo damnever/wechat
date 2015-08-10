@@ -14,8 +14,8 @@ import tornado.escape
 from tornado.ioloop import IOLoop
 
 from libs.handler import BaseHandler
-from libs.utils import active_authentication, json_multi_loads, \
-    json_dumps, json_loads
+from libs.utils import (active_authentication, json_multi_loads,
+                        json_dumps, json_loads)
 from libs import robot
 
 
@@ -77,7 +77,7 @@ class UserLifeHandler(BaseHandler):
     @active_authentication
     @tornado.gen.coroutine
     def post(self):
-        self.rds.user_online(self.current_user, time.time())
+        self.rds.user_online(self.current_user, IOLoop.current().time())
         yield tornado.concurrent.Future()
 
     def on_connection_close(self):
@@ -93,7 +93,8 @@ class UserLifeHandler(BaseHandler):
         # If user reconnect quickly, treat it never offline.
         # Otherwise, the user offline too long , remove the user
         # and publish the user offline message.
-        if timestamp and time.time() - timestamp > self.WAIT_SECONDS:
+        time_gap = IOLoop.current().time() - timestamp
+        if timestamp and time_gap > self.WAIT_SECONDS:
             self.rds.user_offline(username)
 
 
