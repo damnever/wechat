@@ -14,7 +14,7 @@ class Rds(object):
     SUBJECT_OUTLINE = 'outline'
     SUBJECT_NEW_MESSAGE = 'new_message'
 
-    SET_ALL_USERS = 'users:all:online'
+    HT_ALL_USERS = 'users:all:online'
 
     LIST_MESSAGES = 'messages:{from_}:{to}'
 
@@ -52,17 +52,24 @@ class Rds(object):
         self._redis.publish(channel, message)
 
     def all_online_users(self):
-        return list(self._redis.smembers(self.SET_ALL_USERS))
+        return self._redis.hkeys(self.HT_ALL_USERS)
 
-    def online(self, username):
-        if not self._redis.sismember(self.SET_ALL_USERS, username):
-            self._redis.sadd(self.SET_ALL_USERS, username)
+    def user_online(self, username, timestamp):
+        """Set or update online user with online timestamp."""
+        if not self._redis.hexists(self.HT_ALL_USERS, username):
             self._redis.publish(self.SUBJECT_ONLINE, username)
+        self._redis.hset(self.HT_ALL_USERS, username, timestamp)
 
-    def outline(self, username):
-        if self._redis.sismember(self.SET_ALL_USERS, username):
-            self._redis.srem(self.SET_ALL_USERS, username)
-            self._redis.publish(self.SUBJECT_OUTLINE, username)
+    def user_offline(self, username):
+        """Del user in hash table HT_ALL_USERS."""
+        self._redis.hdel(self.HT_ALL_USERS, username)
+        self._redis.publish(self.SUBJECT_OUTLINE, username)
+
+    def get_user_online_timestamp(self, username):
+        """Get online user's timestamp."""
+        if self._redis.hexists(self.HT_ALL_USERS, username):
+            return float(self._redis.hget(self.HT_ALL_USERS, username))
+        return None
 
     def new_message(self, from_name, to_name, message):
         key = self.LIST_MESSAGES.format(from_=from_name, to=to_name)

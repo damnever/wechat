@@ -41,6 +41,8 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 - [ ] When user offline, clear up messages?
 - [ ] Through other sites of OAuth login?
 - [ ] A kinds of BUGs，to be continued O(∩_∩)O~
+    - [x] Get all users when enter chat room. (Solution: Extract some code and make it reusable.)
+    - [x] User online status is unstable. (Solution: Use Redis hash table store username with timestamp and use `IOLoop.add_timeout` given user a chance to reconnect quickly.)
 
 ### LICENSE
 

@@ -3,6 +3,7 @@ $(document).ready(function() {
     if (!window.console.log) window.console.log = function() {};
 
     online.poll();
+    getAllUsers();
 
     $("#messageform").submit( function() {
         newMessage($(this));
@@ -157,10 +158,18 @@ oTajHRweMU7v5zG4WBYUEvIwSsJuUKPtan9/j1Vr1gQjZ0xHQr4PZl2LedTHx+eUp5fXd1DkOQ8P
 j/OYF6DKC9/Mnn3BfebM8+7u7ucA8zvAOwV1Hp3i7Fzn7OxcjpkPk4+BSlePd3JyGTdmTG/sP42A
 pR5evrnDwuL/ARgoXcTY+x11AAAAAElFTkSuQmCC
 */}).toString().split('\n').slice(1,-1).join('');
+var TEMPLATE = (function () { /*
+    <a id="{0}" href="javascript:;" class="list-group-item">
+    <span class="badge">{1}</span>
+    <span class="user-avatar">
+    <img src="data:image/jpg;base64,{2}" class="img-rounded" width="25"/>
+    </span><span class="username">{3}</span><span class="sex">({4})</span>
+    </a>
+    */}).toString().split('\n').slice(1,-1).join('');
 var CURRENT_CHAT_USER = "";
 var ALL_USERS = {"Robot": {sex: "不明", avatar: ROBOT_AVATAR}};
 var CHAT_USERS = {};
-var LIST_CLICKED = "chat";
+var LIST_CLICKED = "all";
 
 
 // Click user to chat.
@@ -205,21 +214,13 @@ var clickUser = function() {
 // Switch user list.
 // Multiple line string: http://javascript.ruanyifeng.com/grammar/string.html
 var switchList = function() {
-	var template = (function () { /*
-	<a id="{0}" href="javascript:;" class="list-group-item">
-	<span class="badge">{1}</span>
-	<span class="user-avatar">
-	<img src="data:image/jpg;base64,{2}" class="img-rounded" width="25"/>
-	</span><span class="username">{3}</span><span class="sex">({4})</span>
-	</a>
-	*/}).toString().split('\n').slice(1,-1).join('');
 	$("#chat-img").on("click", function() {
 		LIST_CLICKED = "chat";
 		// Get current chat users
 		var html = new Array();
 		var i=0;
 		for (var username in CHAT_USERS) {
-			var each = String.format(template,
+			var each = String.format(TEMPLATE,
 					username, CHAT_USERS[username], ALL_USERS[username].avatar,
 					username, ALL_USERS[username].sex.replace("boy","男").replace("girl", "女"));
 			html[i] = each;
@@ -229,22 +230,7 @@ var switchList = function() {
 	});
 	$("#users-img").on("click", function() {
 		LIST_CLICKED = "all";
-		// get all users
-		$.get("/user/list", {}, function(response) {
-			//var userObj = eval("(" + response + ")"); // Convert JSON to a object
-			var data = JSON.parse(response);
-			console.log("DATA", data);
-			var html = new Array();
-            html[0] = String.format(template, "Robot", "",
-                        ROBOT_AVATAR, "Robot", "不明");
-			for(var i = 0; i < data.length; i++) {
-				var each = String.format(template, data[i].username, "",
-						data[i].avatar, data[i].username,
-						data[i].sex.replace("boy","男").replace("girl", "女"));
-				html[i+1] = each;
-			}
-		  	$("#other-list").html(html.join(""));
-		});
+		getAllUsers();
 	});
 }
 
@@ -348,6 +334,29 @@ var online = {
         window.setTimeout(online.poll, online.errorSleepTime);
     }
 };
+
+// Get all users.
+function getAllUsers() {
+    $.get("/user/list", {}, function(response) {
+        //var userObj = eval("(" + response + ")"); // Convert JSON to a object
+        var data = JSON.parse(response);
+        console.log("DATA", data);
+        var html = new Array();
+        html[0] = String.format(TEMPLATE, "Robot", "",
+                    ROBOT_AVATAR, "Robot", "不明");
+        for(var i = 0; i < data.length; i++) {
+            ALL_USERS[data[i].username] = {
+                sex: data[i].sex,
+                avatar: data[i].avatar
+            };
+            var each = String.format(TEMPLATE, data[i].username, "",
+                    data[i].avatar, data[i].username,
+                    data[i].sex.replace("boy","男").replace("girl", "女"));
+            html[i+1] = each;
+        }
+        $("#other-list").html(html.join(""));
+    });
+}
 
 // New message
 function newMessage(form) {

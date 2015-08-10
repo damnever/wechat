@@ -11,6 +11,7 @@ import tornado.web
 import tornado.gen
 import tornado.concurrent
 import tornado.escape
+from tornado.ioloop import IOLoop
 
 from libs.handler import BaseHandler
 from libs.utils import active_authentication, json_multi_loads, \
@@ -71,14 +72,29 @@ class ChatHandler(BaseHandler):
 class UserLifeHandler(BaseHandler):
     """A long polling to indicate user if live."""
 
+    WAIT_SECONDS = 3
+
     @active_authentication
     @tornado.gen.coroutine
     def post(self):
-        self.rds.online(self.current_user)
+        self.rds.user_online(self.current_user, time.time())
         yield tornado.concurrent.Future()
 
     def on_connection_close(self):
-        self.rds.outline(self.current_user)
+        cur_ioloop = IOLoop.current()
+        username = self.current_user
+        # Given user a chance to reconnect soon.
+        cur_ioloop.add_timeout(
+            cur_ioloop.time() + self.WAIT_SECONDS,
+            self.close_user_connection, username)
+
+    def close_user_connection(self, username):
+        timestamp = self.rds.get_user_online_timestamp(username)
+        # If user reconnect quickly, treat it never offline.
+        # Otherwise, the user offline too long , remove the user
+        # and publish the user offline message.
+        if timestamp and time.time() - timestamp > self.WAIT_SECONDS:
+            self.rds.user_offline(username)
 
 
 class UserListHandler(BaseHandler):
