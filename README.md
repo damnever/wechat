@@ -27,11 +27,13 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 
 2. Set `from_addr`(email address), `from_pwd`(email passwrod) and `robot_key`(See http://www.tuling123.com/openapi/cloud/access_api.jsp) in `chat_share.conf`.
 
-3. `ln -s chat_share.conf chat.conf` or rename `chat_share.conf` to `chat.conf`.
+3. MySQL `mysql -u root -p < chat.sql`.
 
-4. `python app.py` or `chmod +x app.py` then `./app.py`.
+4. `ln -s chat_share.conf chat.conf` or rename `chat_share.conf` to `chat.conf`.
 
-5. Enjoy it, and star the repo ~
+5. `python app.py` or `chmod +x app.py` then `./app.py`.
+
+6. Enjoy it, and star the repo ~
 
 ---
 
