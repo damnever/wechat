@@ -23,7 +23,7 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
 
 ### Setup
 
-1. Clone the repo. `pip install -r requirements.txt`.
+1. Clone the repo. `pip install -r requirements.txt`. You must install `MySQL` and `Redis`.
 
 2. Set `from_addr`(email address), `from_pwd`(email passwrod) and `robot_key`(See http://www.tuling123.com/openapi/cloud/access_api.jsp) in `chat_share.conf`.
 
