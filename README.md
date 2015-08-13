@@ -1,51 +1,49 @@
-## Chat Room (To Be Continued)
+## Chat Room
 
-Powered by Tornado, MySQL, Redis, Bootstrap, jQuery.
+Powered by Tornado, MySQL, Redis, Bootstrap, jQuery, Requests and more (To Be Continued...).
 
----
+[效果预览](#result)
+
+***
 
 ### Summary
 
-- **Tornado**: Use long polling, rather than WebSocket.
-- **MySQL**: Store user informations，UUIDs that is what email verification and password recovery need.
-- **Redis**：Store online users, and through Pub-Sub to push online/offline messages, chat messages.
-- **AJAX**: Verify forms, including sign-up, log-in, password recovery, etc.
-- **Email Verification**: Sign-up, password recovery.
-- **Online/offline**: Use long polling to indicate user if online.
-- **New Messages**: If received message from the user is not current chat user, show the number of unread message. Otherwise, show messages in chat box. In addition, pictures is ok!
-- **Robot**: Use API http://www.tuling123.com/openapi/cloud/access_api.jsp
+- `Tornado`提供`Web`后端服务，前端使用`jQuery`和`Bootstrap`（太没新意了...）。
+- 用`MySQL`来存储注册用户信息、邮箱验证和密码找回的`UUID`。
+- 用`Redis`存储在线用户以及聊天信息。
+- 邮箱用来验证注册用户和密码找回。
+- 实时上下线消息、聊天消息的推送使用长轮询（或许考虑使用 WebSocket）结合`Redis`的 Pub-Sub 功能。如果消息来自当前正在聊天的用户，直接显示，否则显示未读数；图片消息经过 JavaScript base64 编码后传送到服务端。
+- 机器人功能使用 http://www.tuling123.com/openapi/cloud/access_api.jsp 的 API，这里只提供文本类消息回复，其它类型都被替换了。
+
+### Setup
+
+1. 项目依赖于`MySQL`和`Redis`，`mysql -u root -p < chat.sql`初始化数据库；`pip install -r requirements.txt`解决`Python 2.7.x`依赖。
+
+2. 邮箱需要支持 SMTP，在`chat_share.conf`设置好`from_addr`（邮箱地址）、`from_pwd`（邮箱密码）和`smtp_server`（SMTP 服务器地址）；机器人需要设置`chat_share.conf`里的`robot_key`，自己申请... 
+
+3. 给`chat_share.conf`创建一个符号链接（Win 下的快捷方式）为`chat.conf`（`ln -s chat_share.conf chat.conf`）或者直接重命名。主要是这部分涉及私密信息，万一提交了就... 所以本地还有一份`chat_dev.conf`。
+
+4. 跑起来: `python app.py`或者`chmod +x app.py` `./app.py`。
+
+5. 第一步 Star 然后 Clone/Download ~(@^_^@)~~
+
+---
+
+### TO-DO
+
+- [x] 用户在线状态不稳定。（解决: 使用 Redis 的 HashTable 存储上线用户信息和一个时间戳，并在`RequestHandler().on_connection_close()`时使用`IOLoop().add_timeout()`给用户一个机会快速的重连）
+- [ ] 发送邮件的时候阻塞太明显了，使用任务队列？
+- [ ] Redis 默认异步的保存数据到本地，或许用户下线多久后自动将消息清除掉。
+- [ ] 通过其它网站的 OAuth 登录？就是个简单聊天室又咋地啦？
+
+### LICENSE
+
+[The BSD 3-Clause License](./LICENSE)
+
+<h3 id="result">Pictures</h3>
 
 ![](./example3.png)
 ![](./example2.png)
 ![](./example1.png)
 
----
-
-### Setup
-
-1. Clone the repo. `pip install -r requirements.txt`. You must install `MySQL` and `Redis`.
-
-2. Set `from_addr`(email address), `from_pwd`(email passwrod) and `robot_key`(See http://www.tuling123.com/openapi/cloud/access_api.jsp) in `chat_share.conf`.
-
-3. MySQL `mysql -u root -p < chat.sql`.
-
-4. `ln -s chat_share.conf chat.conf` or rename `chat_share.conf` to `chat.conf`.
-
-5. `python app.py` or `chmod +x app.py` then `./app.py`.
-
-6. Enjoy it, and star the repo ~
-
----
-
-### TO-DO
-- [x] Robot: http://www.tuling123.com/openapi/cloud/access_api.jsp
-- [ ] When sending email, page would blocking, maybe task queue?
-- [ ] When user offline, clear up messages?
-- [ ] Through other sites of OAuth login?
-- [ ] A kinds of BUGs，to be continued O(∩_∩)O~
-    - [x] Get all users when enter chat room. (Solution: Extract some code and make it reusable.)
-    - [x] User online status is unstable. (Solution: Use Redis hash table store username with timestamp and use `IOLoop.add_timeout` given user a chance to reconnect quickly.)
-
-### LICENSE
-
-[The BSD 3-Clause License](./LICENSE)
+[Old English Version](./English.md)
