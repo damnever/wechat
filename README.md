@@ -35,6 +35,7 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery, Requests and more (To Be Co
 - [ ] 发送邮件的时候阻塞太明显了，使用任务队列？
 - [ ] Redis 默认异步的保存数据到本地，或许用户下线多久后自动将消息清除掉。
 - [ ] 通过其它网站的 OAuth 登录？就是个简单聊天室又咋地啦？
+- [ ] 邮件验证、密码找回 UUID（或者其它）失效时间？
 
 ### LICENSE
 

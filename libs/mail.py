@@ -6,6 +6,8 @@ The module is used to varify email address.
 
 Reference:
     http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000
+Protocol:
+    http://blog.csdn.net/bripengandre/article/details/2191048
 """
 
 import smtplib
