@@ -2,7 +2,7 @@
 
 **例子**：
 
-执行[example.py](./example.py)添加任务，用[executor.py](./executor.py)来执行任务，完整例子见，目前`max_workers`参数并不起作用...
+执行[example.py](./example.py)添加任务，用[executor.py](./executor.py)来执行任务，目前`max_workers`参数并不起作用...
 
 ![](http://damnever.github.io/img/post/2015-08-22-03.png)
 
