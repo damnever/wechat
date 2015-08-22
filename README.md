@@ -1,6 +1,6 @@
 ## Chat Room
 
-Powered by Tornado, MySQL, Redis, Bootstrap, jQuery, Requests and more (To Be Continued...).
+Robot, TaskQueue, Tornado, Redis, MySQL, Bootstrap, jQuery, Requests and more([To Be Continued...](#todo)).
 
 [效果预览](#result)
 
@@ -32,13 +32,14 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery, Requests and more (To Be Co
 
 ---
 
-### TO-DO
+<h3 id="todo">TO-DO</h3>
 
 - [x] 用户在线状态不稳定。（2015/8/13解决: 使用 Redis 的 HashTable 存储上线用户信息和一个时间戳，并在`RequestHandler().on_connection_close()`时使用`IOLoop().add_timeout()`给用户一个机会快速的重连）
-- [x] 发送邮件的时候阻塞太明显了，使用任务队列？（2015/8/22解决：写了一个简单的任务队列，见：[taskq](taskq/)）
+- [x] 发送邮件的时候阻塞太明显了，使用任务队列？（2015/8/22解决：土制了一个简单的任务队列，见：[关于 Web 服务中的耗时后台任务的意淫](http://damnever.github.io/2015/08/22/time-consuming-background-tasks-in-web-service/) & [taskq](taskq/)）
 - [ ] Redis 默认异步的保存数据到本地，或许用户下线多久后自动将消息清除掉。
 - [ ] 通过其它网站的 OAuth 登录？就是个简单聊天室又咋地啦？
 - [ ] 邮件验证、密码找回 UUID（或者其它）失效时间？
+- [ ] 命令行（或`Android`）客户端，恩，这个好！
 
 ### LICENSE
 
