@@ -10,6 +10,7 @@ from tornado.options import define, options
 from libs.message import MessageProducter
 from libs.utils import parse_configure_file, join_path
 from models import mysql, rds
+from taskq.connection import Connection
 
 
 define('port', default=8888, help='run on the given port', type=int)
@@ -42,6 +43,8 @@ class Application(tornado.web.Application):
 
 
 def run_server():
+    # For task queue
+    Connection.setup(db=3)
     parse_configure_file(options, define, join_path(__file__, './chat.conf'))
     options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(

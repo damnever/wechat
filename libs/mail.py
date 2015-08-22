@@ -47,6 +47,8 @@ def send_email(from_addr, from_pwd, to_name, to_addr, message,
     server.sendmail(from_addr, [to_addr], msg.as_string())
     server.quit()
 
+    return 'Send email to <{0}> done!'.format(to_addr)
+
 
 def _format_addr(email_addr):
     name, addr = parseaddr(email_addr)
