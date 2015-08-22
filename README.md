@@ -24,7 +24,7 @@ Powered by Tornado, MySQL, Redis, Bootstrap, jQuery, Requests and more (To Be Co
 
 3. 给`chat_share.conf`创建一个符号链接（Win 下的快捷方式）为`chat.conf`（`ln -s chat_share.conf chat.conf`）或者直接重命名。主要是这部分涉及私密信息，万一提交了就... 所以本地还有一份`chat_dev.conf`。
 
-4. 注册登录发送邮件需要启动任务队列`python taskq/executor.py`，详情见[taskq](taskq/)。
+4. 注册登录发送邮件需要启动任务队列：`cd taskq/`（在`taskq`目录下执行）`python executor.py`，详情见[taskq](taskq/)。
 
 5. 跑起来: `python app.py`或者`chmod +x app.py` `./app.py`。
 
