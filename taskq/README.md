@@ -1,6 +1,22 @@
 ## Task Queue
 
-**运行例子**：`python example.py` `python executor.py`，目前`max_workers`参数并不起作用...
+**例子**：
+
+```Python
+def foobar(*args, **kwargs):
+    return args, kwargs
+
+if __name__ == '__main__':
+    connection.Connection.setup()
+    task_id = tqueue.Queue().enqueue(foobar, ('foobar',), {'foo': 'bar'})
+
+	while True:
+		result = tqueue.get_result_by_id(task_id)
+		if result is not None:
+			print(result)
+```
+
+运行[executor.py](./executor.py)来执行任务，完整例子见[example.py](./example.py)，目前`max_workers`参数并不起作用...
 
 需要执行函数必须可以`import`，如果在需要执行的函数所在的模块`ENQUEUE`，一定要避免加载模块的时候就直接`ENQUEUE`了（最好在`if __name__ == '__main__'`，或者某个不会在加载模块就执行的作用域内），不然会造成死循环... 因为`imp.load_source`会加载并**初始化**那个模块，当时文档没看清，这个里曾经困扰我好久，任务越执行越多...
 
