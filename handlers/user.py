@@ -16,6 +16,7 @@ from tornado.options import options
 from libs import mail
 from libs.handler import BaseHandler
 from libs.utils import encrypt_password, gen_token
+import taskq.tqueue
 
 
 class SginupHandler(BaseHandler):
@@ -48,8 +49,11 @@ class SginupHandler(BaseHandler):
         from_addr = options.from_addr
         from_pwd = options.from_pwd
         smtp_server = options.smtp_server
-        yield self.async_task(mail.send_email, from_addr, from_pwd, username,
-                              email, message, subject, smtp_server)
+        # Use task queue send email
+        taskq.tqueue.Queue().enqueue(
+            mail.send_email,
+            (from_addr, from_pwd, username, email,
+             message, subject, smtp_server))
         # Insert into table and wait to verify
         sql = 'insert into `verify` (token, username) values (%s, %s)'
         yield self.async_task(self.db.insert, sql, token, username)
@@ -147,22 +151,26 @@ class FindPasswdHandler(BaseHandler):
         email = self.get_argument('email', None)
         sql = 'select * from users where email=%s'
         user = yield self.async_task(self.db.get, sql, email)
+        username = user.username
 
         token = gen_token()
         url = '{0}://{1}/changepassword/{2}'.format(
             self.request.protocol, self.request.host, token)
         subject = mail.FINDPW_SUBJECT
-        message = mail.FINDPW_MESSAGE.format(name=user.username, url=url)
+        message = mail.FINDPW_MESSAGE.format(name=username, url=url)
         from_addr = options.from_addr
         from_pwd = options.from_pwd
         smtp_server = options.smtp_server
-        yield self.async_task(mail.send_email, from_addr, from_pwd, user.username,
-                              email, message, subject, smtp_server)
+        # Use task queue send email
+        taskq.tqueue.Queue().enqueue(
+            mail.send_email,
+            (from_addr, from_pwd, username, email,
+             message, subject, smtp_server))
         # Insert into table
         sql = 'insert into `losspw` (token, username) values (%s, %s)'
-        yield self.async_task(self.db.insert, sql, token, user.username)
+        yield self.async_task(self.db.insert, sql, token, username)
         self.render("mail.html",
-                    username=user.username, message="您的密码更改请求已接受")
+                    username=username, message="您的密码更改请求已接受")
 
 
 class ChangePasswordHandler(BaseHandler):
